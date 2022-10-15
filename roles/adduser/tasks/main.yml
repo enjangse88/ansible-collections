@@ -1,0 +1,10 @@
+---
+# tasks file for adduser
+- name: add user 
+  ansible.builtin.user:
+    name: ''{ name }''
+    password: "{{ 'password' | password_hash('sha512', 'mysecretsalt')}}"
+    state: "present"
+    shell: "/bin/bash"
+    create_home: true
+
