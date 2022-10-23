@@ -1,0 +1,7 @@
+---
+# tasks to copy file
+- name: copy file to directory
+  copy: 
+   src: example-file.txt
+   dest: /tmp
+  
