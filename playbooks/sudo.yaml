@@ -1,0 +1,31 @@
+---
+- name: adduser as sudoer without password
+  hosts: all
+  become: true
+  become_user: root
+  gather_facts: false
+  vars:
+    user_name: enjang
+  tasks:
+    #- name: create a file
+    #  file:
+    #    path: "/etc/sudoers.d/{{ user_name }}"
+    #    state: touch
+    #    mode: 0440
+    #    owner: root
+    #    group: root
+    #- name: adduser as sudoer
+    #  copy: 
+    #    content: "{{ user_name }} ALL:(ALL) NOPASSWD:ALL"
+    #    dest: "/etc/sudoers.d/{{ user_name }}"
+        #owner: "root"
+        #group: "root"
+        #mode: "0440" 
+    - name: ADD sudo user
+      lineinfile:
+        path: "/etc/sudoers.d/{{ user_name }}"
+        line: '{{ user_name }} ALL=(ALL) NOPASSWD:ALL'
+        state: present
+        mode: 0440
+        create: yes
+        validate: 'visudo -cf %s'
