@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+  gather_facts: yes
+  tasks:
+  - name: testing if condition
+    file:
+      path: /tmp/new2file.txt
+      state: touch
+    when: ansible_facts['os_family'] == "Red Hat"
+
