@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+  gather_facts: yes
+  tasks:
+    - name: add new directory
+      ansible.builtin.file:
+        path: '/tmp/new_directory'
+        state: directory
+        mode: '0755' 
