@@ -1,0 +1,54 @@
+---
+- name: Install NVM and NodeJS
+  hosts: all
+  become: no
+  tasks:
+  - name: Download NVM installer 
+    shell:
+      "curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o install_nvm.sh"
+
+  - name: Change install into executable
+    file:
+      path: install_nvm.sh
+      owner: enjang
+      group: enjang
+      mode: "0777"
+      
+  - name: Execute installer
+    shell:
+      "bash /home/enjang/install_nvm.sh"
+    
+    
+      #- name: make sure nvm is in bash profile
+      #lineinfile:
+      #path: ~.profile
+      #line: source ~/.nvm/nvm.sh 
+      #create: yes
+
+  - name: reload bash profile
+    shell: source $HOME/.profile
+    args:
+      executable: /bin/bash
+     
+  - name: Install node js
+    shell:
+       ". /home/enjang/.nvm/nvm.sh && nvm install --lts"
+    args:
+      executable: /bin/bash
+
+  - name: Check version
+    shell:
+       "source $HOME/.profile && nvm --version"
+    register: command_output
+    args:
+      executable: /bin/bash
+
+  - name: check node version
+    shell:
+       "source $HOME/.profile && node --version"
+    args:
+      executable: /bin/bash
+  
+        #- debug:
+        #var: command_output.stdout_lines
+
