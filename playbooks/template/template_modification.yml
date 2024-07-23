@@ -1,0 +1,52 @@
+---
+- name: Modify template
+  hosts: all
+  become: true
+  become_user: root
+  gather_facts: true
+  tasks:
+          - name: Enable Banner in SSH
+            lineinfile:
+              path: /etc/ssh/sshd_config
+              regexp: '^Banner'
+              insertafter: '^#Banner' 
+              line: Banner /etc/ssh/banner
+
+          - name: Enable Banner
+            copy:
+               src: file/banner
+               dest: /etc/ssh/banner
+               owner: root
+               group: root
+               mode: '0644'
+
+          - name: Modify MOTD Message
+            copy:
+               src: file/motd
+               dest: /etc/motd
+               owner: root
+               group: root
+               mode: '0644'
+
+          - name: Disable All Login Information
+            file:
+               path: /etc/update-motd.d/
+               owner: root
+               group: root
+               mode: '0644'
+               state: directory
+               recurse: yes
+
+          - name: Enable header login information
+            file:
+               path: /etc/update-motd.d/00-header
+               mode: '0755'
+
+
+          - name: Reload SSH Configuration
+            service:
+               name: ssh 
+               state: reloaded 
+
+
+
